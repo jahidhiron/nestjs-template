@@ -1,5 +1,5 @@
 import { buildOrderSQL } from '@/common/repositories/helpers';
-import { IFindAll } from '@/common/repositories/types';
+import { ListWithMeta } from '@/common/repositories/types';
 import { ProjectListQueryDto } from '@/modules/projects/dtos';
 import { ProjectRecord } from '@/modules/projects/providers/interfaces';
 import { ProjectRepository } from '@/modules/projects/repositories';
@@ -16,9 +16,9 @@ export class ProjectListProvider {
    * Fetch paginated projects with optional search, relations, and sorting.
    *
    * @param dto - Query parameters including page, limit, search term, sort, and filters
-   * @returns {Promise<IFindAll<ProjectRecord, 'projects'>>} Paginated projects with metadata.
+   * @returns {Promise<ListWithMeta<ProjectRecord, 'projects'>>} Paginated projects with metadata.
    */
-  async execute(dto: ProjectListQueryDto): Promise<IFindAll<ProjectRecord, 'projects'>> {
+  async execute(dto: ProjectListQueryDto): Promise<ListWithMeta<ProjectRecord, 'projects'>> {
     const dbType = this.projectRepository.repo.manager.connection.options.type;
     const isPostgres = dbType === 'postgres';
 

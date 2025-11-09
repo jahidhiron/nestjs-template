@@ -1,4 +1,4 @@
-import { IFindAll } from '@/common/repositories/types';
+import { ListWithMeta } from '@/common/repositories/types';
 import { ProfileListQueryDto } from '@/modules/projects/dtos';
 import { ProfileEntity } from '@/modules/projects/entities';
 import { ProfileRepository } from '@/modules/projects/repositories';
@@ -17,9 +17,9 @@ export class ProfileListProvider {
    * @method execute
    * @description Fetches paginated profiles with optional search, sorting, and relations.
    * @param {ProfileListQueryDto} dto - Query parameters for pagination and filtering.
-   * @returns {Promise<IFindAll<ProfileEntity, 'profiles'>>} Paginated profiles with metadata.
+   * @returns {Promise<ListWithMeta<ProfileEntity, 'profiles'>>} Paginated profiles with metadata.
    */
-  async execute(dto: ProfileListQueryDto): Promise<IFindAll<ProfileEntity, 'profiles'>> {
+  async execute(dto: ProfileListQueryDto): Promise<ListWithMeta<ProfileEntity, 'profiles'>> {
     const { q, page, limit, sortBy, projectId } = dto;
 
     const query: FindOptionsWhere<ProfileEntity> = {};

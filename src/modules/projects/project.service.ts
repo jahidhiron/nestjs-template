@@ -5,21 +5,25 @@ import {
   ProfileListQueryDto,
   ProjectListQueryDto,
   TaskListQueryDto,
+  UpdateProfileDto,
   UpdateProjectDto,
 } from '@/modules/projects/dtos';
-import { ProjectEntity } from '@/modules/projects/entities';
+import { ProfileEntity, ProjectEntity } from '@/modules/projects/entities';
 import {
   CreateCompleteProjectProvider,
   CreateProjectProvider,
   FindOneProjectProvider,
+  PickProfileForEnqueueProvider,
   ProfileListProvider,
   ProjectListProvider,
   RemoveProjectProvider,
   TaskListProvider,
+  UpdateProfileProvider,
   UpdateProjectProvider,
 } from '@/modules/projects/providers';
 import { ErrorResponse } from '@/shared/responses';
 import { Injectable } from '@nestjs/common';
+import { FindOptionsWhere } from 'typeorm';
 
 /**
  * Service handling project operations.
@@ -48,6 +52,8 @@ export class ProjectService {
     private readonly projectList: ProjectListProvider,
     private readonly profileListPro: ProfileListProvider,
     private readonly taskListPro: TaskListProvider,
+    private readonly updateProfilePro: UpdateProfileProvider,
+    private readonly pickProfileForEnqueuePro: PickProfileForEnqueueProvider,
     private readonly errorResponse: ErrorResponse,
   ) {}
 
@@ -80,6 +86,17 @@ export class ProjectService {
   async update(id: number, dto: UpdateProjectDto) {
     const project = await this.updateProject.execute(id, dto);
     return { project };
+  }
+
+  /**
+   * Updates a profile by custom query.
+   * @param query - FindOptionsWhere<ProfileEntity>
+   * @param dto - Update data
+   * @returns Updated profile
+   */
+  async updateProfile(query: FindOptionsWhere<ProfileEntity>, dto: UpdateProfileDto) {
+    const profile = await this.updateProfilePro.execute(query, dto);
+    return { profile };
   }
 
   /**
@@ -130,6 +147,15 @@ export class ProjectService {
    */
   profileList(dto: ProfileListQueryDto) {
     return this.profileListPro.execute(dto);
+  }
+
+  /**
+   * Retrieves profile list.
+   * @param limit - number of limit
+   * @returns Profiles
+   */
+  pickProfileForEnqueue(limit?: number) {
+    return this.pickProfileForEnqueuePro.execute(limit);
   }
 
   /**

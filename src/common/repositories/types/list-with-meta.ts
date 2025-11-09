@@ -1,6 +1,6 @@
 import { Meta } from '../interfaces';
 
-export type IFindAll<T, K extends string = 'collection'> = {
+export type ListWithMeta<T, K extends string = 'collection'> = {
   [key in K]: T[];
 } & {
   meta: Meta;

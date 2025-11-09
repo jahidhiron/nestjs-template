@@ -9,4 +9,5 @@ export * from './project-response.dto';
 export * from './project.dto';
 export * from './task-list-query.dto';
 export * from './task-list-response.dto';
+export * from './update-profile.dto';
 export * from './update-project.dto';

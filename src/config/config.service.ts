@@ -1,5 +1,6 @@
 import { AppConfigService } from '@/config/app';
 import { DbConfigService } from '@/config/db';
+import { RabbitmqConfigService } from '@/config/rabbitmq';
 import { SwaggerConfigService } from '@/config/swagger';
 import { Injectable } from '@nestjs/common';
 
@@ -9,5 +10,6 @@ export class ConfigService {
     public readonly app: AppConfigService,
     public readonly swagger: SwaggerConfigService,
     public readonly db: DbConfigService,
+    public readonly rabbitmq: RabbitmqConfigService,
   ) {}
 }

@@ -1,4 +1,4 @@
-import { IFindAll } from '@/common/repositories/types';
+import { ListWithMeta } from '@/common/repositories/types';
 import { TaskListQueryDto } from '@/modules/projects/dtos';
 import { TaskEntity } from '@/modules/projects/entities';
 import { TaskRepository } from '@/modules/projects/repositories';
@@ -17,9 +17,9 @@ export class TaskListProvider {
    * @method execute
    * @description Fetches paginated tasks with optional search, sorting, and relations.
    * @param {TaskListQueryDto} dto - Query parameters for pagination and filtering.
-   * @returns {Promise<IFindAll<TaskEntity, 'tasks'>>} Paginated tasks with metadata.
+   * @returns {Promise<ListWithMeta<TaskEntity, 'tasks'>>} Paginated tasks with metadata.
    */
-  async execute(dto: TaskListQueryDto): Promise<IFindAll<TaskEntity, 'tasks'>> {
+  async execute(dto: TaskListQueryDto): Promise<ListWithMeta<TaskEntity, 'tasks'>> {
     const { q, page, limit, sortBy, projectId } = dto;
 
     const query: FindOptionsWhere<TaskEntity> = {};

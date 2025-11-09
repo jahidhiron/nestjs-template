@@ -3,11 +3,14 @@ import { ProfileEntity, TaskEntity } from '@/modules/projects/entities';
 import {
   CreateCompleteProjectProvider,
   CreateProjectProvider,
+  FindOneProfileProvider,
   FindOneProjectProvider,
+  PickProfileForEnqueueProvider,
   ProfileListProvider,
   ProjectListProvider,
   RemoveProjectProvider,
   TaskListProvider,
+  UpdateProfileProvider,
   UpdateProjectProvider,
 } from '@/modules/projects/providers';
 import {
@@ -49,6 +52,9 @@ import { ProjectService } from './project.service';
     ProfileListProvider,
     TaskListProvider,
     CreateCompleteProjectProvider,
+    FindOneProfileProvider,
+    UpdateProfileProvider,
+    PickProfileForEnqueueProvider,
   ],
   exports: [ProjectService],
 })

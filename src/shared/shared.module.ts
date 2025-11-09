@@ -1,3 +1,5 @@
+import { HttpClientService } from '@/shared/http-client';
+import { HttpModule } from '@nestjs/axios';
 import { Global, Module } from '@nestjs/common';
 import { HashService } from './hash/hash.service';
 import { TokenService } from './hash/token.service';
@@ -6,7 +8,15 @@ import { ResponseService } from './responses/response.service';
 
 @Global()
 @Module({
-  providers: [ResponseService, SuccessResponse, ErrorResponse, HashService, TokenService],
-  exports: [SuccessResponse, ErrorResponse, HashService, TokenService],
+  imports: [HttpModule],
+  providers: [
+    ResponseService,
+    SuccessResponse,
+    ErrorResponse,
+    HashService,
+    TokenService,
+    HttpClientService,
+  ],
+  exports: [SuccessResponse, ErrorResponse, HashService, TokenService, HttpClientService],
 })
 export class SharedModule {}

@@ -6,6 +6,7 @@ import { DeserializeQuery, validationPipe } from '@/common/pipes';
 import { ConfigService } from '@/config';
 import { AppConfigService } from '@/config/app';
 import { AppLogger, createWinstonLoggerConfig } from '@/config/logger';
+import { setupRabbitmq } from '@/config/rabbitmq';
 import { setupSwagger } from '@/config/swagger';
 import { AppModule } from '@/modules/app/app.module';
 import { VersioningType } from '@nestjs/common';
@@ -30,6 +31,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const appConfig = configService.app;
   const swaggerConfig = configService.swagger;
+  const rabbitmq = configService.rabbitmq;
   const port = appConfig.port;
 
   // Winston logger instance
@@ -55,6 +57,10 @@ async function bootstrap() {
   // Swagger
   setupSwagger(app, appConfig);
 
+  // rabbitmq
+  await setupRabbitmq(app, rabbitmq, logger);
+
+  // listen
   await app.listen(port);
 
   return { app, logger };
