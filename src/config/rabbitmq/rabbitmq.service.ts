@@ -12,4 +12,23 @@ export class RabbitmqConfigService {
   get rabbitmqQueue(): string {
     return this.configService.get<string>('rabbitmqQueue') as string;
   }
+
+  get rabbitmqManagementUIPort(): number {
+    return this.configService.get<number>('rabbitmqManagementUIPort') as number;
+  }
+
+  get username(): string {
+    const uri = new URL(this.rabbitmqUri);
+    return uri.username;
+  }
+
+  get password(): string {
+    const uri = new URL(this.rabbitmqUri);
+    return uri.password;
+  }
+
+  get apiURI(): string {
+    const uri = new URL(this.rabbitmqUri);
+    return `http://${uri.hostname}:${this.rabbitmqManagementUIPort}/api`;
+  }
 }

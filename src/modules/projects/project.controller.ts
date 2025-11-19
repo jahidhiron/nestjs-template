@@ -46,7 +46,7 @@ import {
 @Controller(ModuleName.Project)
 export class ProjectController {
   constructor(
-    private readonly successService: SuccessResponse,
+    private readonly successResponse: SuccessResponse,
     private readonly projectService: ProjectService,
   ) {}
 
@@ -61,7 +61,7 @@ export class ProjectController {
   @CreateProjectSwaggerDocs()
   async create(@Body() dto: CreateProjectDto) {
     const result = await this.projectService.create(dto);
-    return this.successService.created({
+    return this.successResponse.created({
       module: ModuleName.Project,
       key: 'create-project',
       ...result,
@@ -73,7 +73,7 @@ export class ProjectController {
   @CreateCompletedProjectSwaggerDocs()
   async createCompletedProject(@Body() dto: CreateCompleteProjectDto) {
     const result = await this.projectService.createCompletedProject(dto);
-    return this.successService.created({
+    return this.successResponse.created({
       module: ModuleName.Project,
       key: 'create-complete-project',
       ...result,
@@ -92,7 +92,11 @@ export class ProjectController {
   @UpdateProjectSwaggerDocs()
   async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateProjectDto) {
     const result = await this.projectService.update(id, dto);
-    return this.successService.ok({ module: ModuleName.Project, key: 'update-project', ...result });
+    return this.successResponse.ok({
+      module: ModuleName.Project,
+      key: 'update-project',
+      ...result,
+    });
   }
 
   /**
@@ -105,7 +109,7 @@ export class ProjectController {
   @RemoveProjectSwaggerDocs()
   async remove(@Param('id', ParseIntPipe) id: number) {
     await this.projectService.remove(id);
-    return this.successService.noContent({ module: ModuleName.Project, key: 'remove-project' });
+    return this.successResponse.noContent({ module: ModuleName.Project, key: 'remove-project' });
   }
 
   @Get('profiles')
@@ -113,7 +117,7 @@ export class ProjectController {
   @ProfileListSwaggerDocs()
   async profileList(@Query() dto: ProfileListQueryDto) {
     const result = await this.projectService.profileList(dto);
-    return this.successService.ok({ module: ModuleName.Project, key: 'profile-list', ...result });
+    return this.successResponse.ok({ module: ModuleName.Project, key: 'profile-list', ...result });
   }
 
   @Get('tasks')
@@ -121,7 +125,7 @@ export class ProjectController {
   @TaskListSwaggerDocs()
   async taskList(@Query() dto: TaskListQueryDto) {
     const result = await this.projectService.taskList(dto);
-    return this.successService.ok({ module: ModuleName.Project, key: 'task-list', ...result });
+    return this.successResponse.ok({ module: ModuleName.Project, key: 'task-list', ...result });
   }
 
   /**
@@ -135,7 +139,11 @@ export class ProjectController {
   @DetailProjectSwaggerDocs()
   async detail(@Param('id', ParseIntPipe) id: number) {
     const result = await this.projectService.detail(id);
-    return this.successService.ok({ module: ModuleName.Project, key: 'detail-project', ...result });
+    return this.successResponse.ok({
+      module: ModuleName.Project,
+      key: 'detail-project',
+      ...result,
+    });
   }
 
   /**
@@ -151,6 +159,6 @@ export class ProjectController {
   @ProjectListSwaggerDocs()
   async list(@Query() dto: ProjectListQueryDto) {
     const result = await this.projectService.list(dto);
-    return this.successService.ok({ module: ModuleName.Project, key: 'project-list', ...result });
+    return this.successResponse.ok({ module: ModuleName.Project, key: 'project-list', ...result });
   }
 }

@@ -18,6 +18,7 @@ import {
   ProjectRepository,
   TaskRepository,
 } from '@/modules/projects/repositories';
+import { RealtimeModule } from '@/realtime/realtime.module';
 import { SharedModule } from '@/shared/shared.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -37,6 +38,7 @@ import { ProjectService } from './project.service';
     TypeOrmModule.forFeature([ProfileEntity, ProfileEntity, TaskEntity]),
     SharedModule,
     ConfigModule,
+    RealtimeModule,
   ],
   controllers: [ProjectController],
   providers: [

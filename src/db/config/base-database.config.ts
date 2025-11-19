@@ -15,7 +15,7 @@ export const getBaseDatabaseConfig = ({
     entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
     migrations: [__dirname + '/../migrations/*.{ts,js}'],
     synchronize: app.isDev,
-    // dropSchema: app.isDev,
+    dropSchema: app.isTest,
     migrationsRun: db.migrationsRun,
     charset: db.charset,
     bigNumberStrings: db.bigNumberStrings,

@@ -6,6 +6,7 @@ import dbConfig from '@/config/db/db.config';
 import { I18nLoader } from '@/config/i18n';
 import { AppLogger, createWinstonLoggerConfig } from '@/config/logger';
 import { rabbitmqConfig, RabbitmqConfigService } from '@/config/rabbitmq';
+import { realtimeConfig, RealtimeConfigService } from '@/config/realtime';
 import { SwaggerConfigService } from '@/config/swagger';
 import swaggerConfig from '@/config/swagger/swagger.config';
 import { Module } from '@nestjs/common';
@@ -17,7 +18,7 @@ import { CookieResolver, HeaderResolver, I18nModule, QueryResolver } from 'nestj
   imports: [
     NestConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, swaggerConfig, dbConfig, rabbitmqConfig],
+      load: [appConfig, swaggerConfig, dbConfig, rabbitmqConfig, realtimeConfig],
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'en',
@@ -43,6 +44,7 @@ import { CookieResolver, HeaderResolver, I18nModule, QueryResolver } from 'nestj
     SwaggerConfigService,
     DbConfigService,
     RabbitmqConfigService,
+    RealtimeConfigService,
   ],
   exports: [ConfigService, AppLogger],
 })

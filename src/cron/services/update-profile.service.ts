@@ -32,7 +32,7 @@ export class UpdateProfileService implements OnModuleInit {
   }
 
   /**
-   * Cron job (every 30s):
+   * Cron job (every 1m):
    * 1. Pick eligible profiles (idle + due)
    * 2. Publish update jobs to RabbitMQ
    * 3. On publish fail → revert status back to ProfileStatus.Idle

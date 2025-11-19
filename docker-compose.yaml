@@ -1,0 +1,16 @@
+services:
+  api:
+    container_name: ${API_CONTAINER_NAME:-api}
+    build:
+      context: .
+      args:
+        NODE_ENV: ${APPLICATION_MODE:-development}
+    ports:
+      - '${PORT:-8000}:${PORT:-8000}'
+    networks:
+      - app-network
+    restart: always
+
+networks:
+  app-network:
+    driver: bridge

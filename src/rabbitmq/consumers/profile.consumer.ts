@@ -4,6 +4,7 @@ import { UpdateProfileDto } from '@/modules/projects/dtos';
 import { ProfileStatus } from '@/modules/projects/enums';
 import { ProjectService } from '@/modules/projects/project.service';
 import { eventName } from '@/rabbitmq/constants';
+import { SocketService } from '@/realtime/services';
 import { Controller } from '@nestjs/common';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { Channel, ConsumeMessage } from 'amqplib';
@@ -13,6 +14,7 @@ export class UpdateProfileConsumerController {
   constructor(
     private readonly projectService: ProjectService,
     private readonly logger: AppLogger,
+    private readonly socketService: SocketService,
   ) {}
 
   /**
@@ -63,10 +65,17 @@ export class UpdateProfileConsumerController {
         nextRunAt: null,
       };
 
-      await this.projectService.updateProfile(
+      const { profile } = await this.projectService.updateProfile(
         { id, queueStatus: ProfileStatus.Processing },
         updatePatch,
       );
+
+      /**
+       * realtime update (socket)
+       */
+      if (profile) {
+        this.socketService.emitToAll('profile_update', profile);
+      }
 
       this.logger.log(`Profile updated successfully (id=${id}, version=${nextVersion})`);
       channel.ack(msg);

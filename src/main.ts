@@ -9,6 +9,7 @@ import { AppLogger, createWinstonLoggerConfig } from '@/config/logger';
 import { setupRabbitmq } from '@/config/rabbitmq';
 import { setupSwagger } from '@/config/swagger';
 import { AppModule } from '@/modules/app/app.module';
+import { SocketIoAdapter } from '@/realtime/adapters';
 import { VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as fs from 'fs';
@@ -41,7 +42,10 @@ async function bootstrap() {
 
   // Middleware
   setupSecurity(app);
-  setupSwaggerAuth(app, swaggerConfig);
+
+  if (swaggerConfig.enableSwaggerProtection) {
+    setupSwaggerAuth(app, swaggerConfig);
+  }
 
   // API prefix & versioning
   app.setGlobalPrefix(API_PREFIX);
@@ -59,6 +63,9 @@ async function bootstrap() {
 
   // rabbitmq
   await setupRabbitmq(app, rabbitmq, logger);
+
+  // realtime
+  app.useWebSocketAdapter(new SocketIoAdapter(app, configService));
 
   // listen
   await app.listen(port);

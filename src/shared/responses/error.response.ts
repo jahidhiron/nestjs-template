@@ -93,7 +93,9 @@ export class ErrorResponse {
     );
   }
 
-  async internalServerError<T extends object = any>(params: ResponseParams<T>): Promise<never> {
+  async internalServerError<T extends object = any>(
+    params: ResponseParams<T> = {} as ResponseParams<T>,
+  ): Promise<never> {
     if (!params.key && !params.message) {
       params.message = 'Internal Server Error';
     }

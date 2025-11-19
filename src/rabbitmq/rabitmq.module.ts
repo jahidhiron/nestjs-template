@@ -3,6 +3,7 @@ import { ProjectModule } from '@/modules/projects/project.module';
 import { ServiceNames } from '@/rabbitmq/constants';
 import { UpdateProfileConsumerController } from '@/rabbitmq/consumers';
 import { UpdateProfileProducerService } from '@/rabbitmq/producers';
+import { RealtimeModule } from '@/realtime/realtime.module';
 import { forwardRef, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
@@ -11,6 +12,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     forwardRef(() => ProjectModule),
     // CommonModule,
     ConfigModule,
+    RealtimeModule,
     ClientsModule.registerAsync([
       {
         name: ServiceNames.NEST_TEMPLATE_SYNC,

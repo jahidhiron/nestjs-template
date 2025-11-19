@@ -12,4 +12,8 @@ export class SwaggerConfigService {
   get password(): string {
     return this.configService.get<string>('swagger.password') as string;
   }
+
+  get enableSwaggerProtection(): boolean {
+    return this.configService.get<string>('swagger.enableSwaggerProtection') === 'true';
+  }
 }

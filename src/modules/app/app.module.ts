@@ -1,6 +1,8 @@
 import { CronModule } from '@/cron/cron.module';
 import { DatabaseModule } from '@/db/database.module';
+import { HealthModule } from '@/modules/healths/health.module';
 import { ProjectModule } from '@/modules/projects/project.module';
+import { RealtimeModule } from '@/realtime/realtime.module';
 import { SharedModule } from '@/shared';
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -16,6 +18,8 @@ import { AppService } from './app.service';
     SharedModule,
     DatabaseModule,
     ProjectModule,
+    HealthModule,
+    RealtimeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
