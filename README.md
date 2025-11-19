@@ -33,6 +33,12 @@ The service is containerized with **Docker**.
 - 🔒 Environment-based configuration with `.env` files
 - 📖 Integrated Swagger API documentation
 - ✅ Supports automatic database migrations
+- 🐇 RabbitMQ messaging integration for microservices
+- 🌐 WebSocket support for real-time communication
+- ⏱️ Task scheduling with NestJS Schedule module
+- 🌍 Internationalization (i18n) support
+- 🧪 Structured testing setup with Jest and Supertest
+- 🖊️ Code formatting and linting with Prettier & ESLint
 
 ---
 
