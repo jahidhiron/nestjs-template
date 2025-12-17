@@ -20,6 +20,7 @@ The service is containerized with **Docker**.
 - [Scripts](#scripts)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
 - [Support](#support)
 - [License](#license)
 
@@ -1076,9 +1077,26 @@ If you want to test the real-time WebSocket functionality, you can use the provi
 
 > **Note:** Make sure your server is running and the WebSocket endpoint is accessible.
 
+# Contributing to NestJS Template
+
+We welcome contributions to this project! To get started, fork the repository and clone it to your local machine. Here are some guidelines to follow:
+
+## Reporting Issues
+
+Please create a new issue for any bugs or suggestions you have. Be sure to provide clear details about the problem, including steps to reproduce.
+
+## Submitting Pull Requests
+
+- Fork the repository and clone it locally.
+- Create a new branch (`git checkout -b feature-name`).
+- Write your code and tests.
+- Commit your changes (`git commit -am 'Add new feature'`).
+- Push your branch to your fork (`git push origin feature-name`).
+- Submit a pull request.
+
 ## Contributing
 
-We welcome contributions to improve the NestJS Teamplate!
+We welcome contributions to improve the NestJS Template! Please follow the guidelines in the [CONTRIBUTING.md](./CONTRIBUTING.md) file for details on how to contribute.
 
 ### How to Contribute
 
@@ -1088,6 +1106,12 @@ We welcome contributions to improve the NestJS Teamplate!
    git clone git@github.com:jahidhiron/nestjs-template.git
    cd nestjs-template
    ```
+
+## Code of Conduct
+
+We are committed to maintaining a positive and inclusive environment for all contributors. Please review our [Code of Conduct](./CODE_OF_CONDUCT.md) to understand the expectations for participation in this project.
+
+By participating, you agree to uphold these standards and contribute positively to the community.
 
 ## Support
 
