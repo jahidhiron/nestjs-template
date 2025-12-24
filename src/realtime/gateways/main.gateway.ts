@@ -1,5 +1,5 @@
 import { AppLogger } from '@/config/logger';
-import { ClientProfile } from '@/realtime/interfaces';
+import { AckPayload } from '@/realtime/interfaces';
 import { OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Namespace, Socket } from 'socket.io';
 import { SocketService } from '../services/socket.service';
@@ -28,10 +28,8 @@ export class MainGateway implements OnGatewayInit {
         at: new Date().toISOString(),
       });
 
-      socket.on('connect_ack', (payload: ClientProfile) => {
-        this.logger.log(
-          `Connection acknowledge from client ID: ${socket.id}. Name: ${payload.name} at ${payload.timestamp}.`,
-        );
+      socket.on('connect_ack', (_payload: AckPayload) => {
+        this.logger.log(`Connection acknowledge from client ID: ${socket.id}.`);
       });
 
       socket.on('disconnect', () => {

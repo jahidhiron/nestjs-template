@@ -2,6 +2,9 @@ export enum ModuleName {
   App = 'app',
   Common = 'common',
   Shared = 'shared',
-  Project = 'projects',
+  AdSpend = 'ad-spends',
+  AdSpendInvoice = 'ad-spend-invoices',
+  AdSpendDivision = 'ad-spend-divisions',
+  AdSpendSource = 'ad-spend-sources',
   Health = 'healths',
 }

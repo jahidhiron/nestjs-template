@@ -61,32 +61,120 @@ cd nestjs-template
 
 ## Environment Variables
 
-Below is an example of the `.env` file used for the **NestJS Teamplate**.
+Below is an example of the .env file used on the local machine for the **NestJS Template Project**. You may refer to the **.env.local.example** file for guidance.
 
 ```env
-# app
-PORT=8000
+# App
+PORT=8080
 APPLICATION_MODE=development
-API_CONTAINER_NAME=your-api-container-name
-API_BASE_URL="http://localhost:8000"
+API_BASE_URL="http://localhost:8080"
 
-# db
+# DB
 DATABASE_URL=mysql://root:123456@localhost:3306/template_db
 MIGRATIONS_RUN=false
 
-# swagger
-SWAGGER_USER=admin
-SWAGGER_PASSWORD=123456
-ENABLE_SWAGGER_PROTECTION=false
+# Swagger
+ENABLE_SWAGGER_PROTECTION=true
+SWAGGER_USER=swagger-admin
+SWAGGER_PASSWORD=Pass1234?
 
 # RabbitMQ
+ENABLE_RABBITMQ=true
 RABBITMQ_URI=amqp://guest:guest@localhost:5672
+RABBITMQ_MANAGEMENT_UI_PORT=15672
+RABBITMQ_QUEUE=nest_template_queue
+
+# Realtime
+CLIENT_SOCKET_URL="http://localhost:8080"
+```
+
+Below is an example of the .env file used on the Docker for the **NestJS Template Project**. You may refer to the **.env.docker.example** file for guidance.
+
+```env
+# App
+PORT=8080
+APPLICATION_MODE=production
+API_BASE_URL="http://localhost:8080"
+
+# API container
+API_CONTAINER_NAME=template-api
+
+# DB
+MYSQL_CONTAINER_NAME=mysql
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=template_db
+MYSQL_USERNAME=app_user
+MYSQL_PASSWORD=Pass1234@
+MIGRATIONS_RUN=true
+
+# Swagger
+ENABLE_SWAGGER_PROTECTION=true
+SWAGGER_USER=swagger-admin
+SWAGGER_PASSWORD=Pass1234?
+
+# RabbitMQ
+ENABLE_RABBITMQ=true
+RABBITMQ_CONTAINER_NAME=rabbitmq
+RABBITMQ_DEFAULT_USER=admin
+RABBITMQ_DEFAULT_PASS=Pass1234!
 RABBITMQ_QUEUE=nest_template_queue
 RABBITMQ_MANAGEMENT_UI_PORT=15672
 
-# realtime
-CLIENT_SOCKET_URL="ws://localhost:8080"
+# Realtime
+CLIENT_SOCKET_URL="http://localhost:8080"
 ```
+
+Below is an example of the .env.example file for the NestJS Template Project. Please refer to the .env.example file for guidance.
+
+```env
+# App
+PORT=8080
+APPLICATION_MODE=production
+API_BASE_URL="http://localhost:8080"
+
+# If you are using docker
+API_CONTAINER_NAME=template-api
+
+# DB
+# If using a MySQL database as a Docker container, configure the following variables
+MYSQL_CONTAINER_NAME=mysql
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=template_db
+MYSQL_USERNAME=app_user
+MYSQL_PASSWORD=root
+
+# If using a local database or a cloud-based database, set the DATABASE_URL accordingly
+DATABASE_URL=mysql://root:123456@localhost:3306/template_db
+
+# This setting is common for both Docker and direct database URL configurations.
+# Set MIGRATIONS_RUN to true if you want to automatically run database migrations.
+MIGRATIONS_RUN=true
+
+# Swagger
+ENABLE_SWAGGER_PROTECTION=true
+SWAGGER_USER=swagger-admin
+SWAGGER_PASSWORD=Pass1234?
+
+# RabbitMQ
+# If using a RabbitMQ as a Docker container, configure the following variables
+RABBITMQ_CONTAINER_NAME=rabbitmq
+RABBITMQ_DEFAULT_USER=admin
+RABBITMQ_DEFAULT_PASS=admin
+
+# If using a local RabbitMQ or a cloud-based RabbitMQ, set the RABBITMQ_URI accordingly
+RABBITMQ_URI=amqp://admin:admin@localhost:5672
+
+# These settings are common for both Docker and direct configurations.
+ENABLE_RABBITMQ=true
+RABBITMQ_QUEUE=nest_template_queue
+RABBITMQ_MANAGEMENT_UI_PORT=15672
+
+# Realtime
+CLIENT_SOCKET_URL="http://localhost:8080"
+
+```
+
+> **Important:** Ensure that you create a `.env` file in the root directory and use either the `.env.local.example` or `.env.docker.example` as a template.
 
 ## Running the Service
 

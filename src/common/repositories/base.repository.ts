@@ -4,6 +4,7 @@ import {
   ListResult,
   PaginatedListParams,
   PaginatedResult,
+  RangeCondition,
 } from '@/common/repositories/interfaces';
 import { AppLogger } from '@/config/logger';
 import { ErrorResponse } from '@/shared/responses';
@@ -212,13 +213,61 @@ export class BaseRepository<T extends ObjectLiteral> {
     /* WHERE CLAUSES */
     const applyConditions = (obj: Record<string, unknown>, parentAlias = this.alias): void => {
       for (const [key, value] of Object.entries(obj)) {
+        // Check if the value is an object (but not an array), for dynamic range filtering
         if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
-          const relationPath = `${parentAlias}.${key}`;
-          const relationAlias =
-            joinedAliases[relationPath] ||
-            `${parentAlias}_${key}_${Object.keys(joinedAliases).length}`;
-          applyConditions(value as Record<string, unknown>, relationAlias);
+          // Check if the value is a RangeCondition (has properties like $gte, $lte, etc.)
+          if (
+            '$gte' in value ||
+            '$lte' in value ||
+            '$gt' in value ||
+            '$lt' in value ||
+            '$eq' in value
+          ) {
+            const rangeValue = value as RangeCondition;
+            const column = `${parentAlias}.${key}`;
+            const paramKey = `${parentAlias.replace(/\./g, '_')}_${key}`;
+
+            // Dynamically apply filters for the range operators
+            if (rangeValue.$gte !== undefined) {
+              const sanitizedParamKey = paramKey.replace(/[${}]/g, '_');
+              qb.andWhere(`${column} >= :${sanitizedParamKey}_gte`, {
+                [`${sanitizedParamKey}_gte`]: rangeValue.$gte,
+              });
+            }
+            if (rangeValue.$lte !== undefined) {
+              const sanitizedParamKey = paramKey.replace(/[${}]/g, '_');
+              qb.andWhere(`${column} <= :${sanitizedParamKey}_lte`, {
+                [`${sanitizedParamKey}_lte`]: rangeValue.$lte,
+              });
+            }
+            if (rangeValue.$gt !== undefined) {
+              const sanitizedParamKey = paramKey.replace(/[${}]/g, '_');
+              qb.andWhere(`${column} > :${sanitizedParamKey}_gt`, {
+                [`${sanitizedParamKey}_gt`]: rangeValue.$gt,
+              });
+            }
+            if (rangeValue.$lt !== undefined) {
+              const sanitizedParamKey = paramKey.replace(/[${}]/g, '_');
+              qb.andWhere(`${column} < :${sanitizedParamKey}_lt`, {
+                [`${sanitizedParamKey}_lt`]: rangeValue.$lt,
+              });
+            }
+            if (rangeValue.$eq !== undefined) {
+              const sanitizedParamKey = paramKey.replace(/[${}]/g, '_');
+              qb.andWhere(`${column} = :${sanitizedParamKey}_eq`, {
+                [`${sanitizedParamKey}_eq`]: rangeValue.$eq,
+              });
+            }
+          } else {
+            // If the value is an object but not a range condition, recurse into it (for handling relations)
+            const relationPath = `${parentAlias}.${key}`;
+            const relationAlias =
+              joinedAliases[relationPath] ||
+              `${parentAlias}_${key}_${Object.keys(joinedAliases).length}`;
+            applyConditions(value as Record<string, unknown>, relationAlias);
+          }
         } else if (value !== undefined) {
+          // Handle simple equality condition if value is not an object
           const column = `${parentAlias}.${key}`;
           const paramKey = `${parentAlias.replace(/\./g, '_')}_${key}`;
           qb.andWhere(`${column} = :${paramKey}`, {

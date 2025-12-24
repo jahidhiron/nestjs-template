@@ -1,13 +1,13 @@
 {
   "name": "nestjs-template",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A starter NestJS project template with RabbitMQ messaging, TypeORM, WebSocket support, scheduling, Swagger documentation, i18n, and structured testing setup. Includes Docker scripts, migrations, and linting/formatting tools for rapid development and production-ready deployments.",
-  "author": "",
+  "author": "Jahid Hiron",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
-    "build": "npm run clean && nest build",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",

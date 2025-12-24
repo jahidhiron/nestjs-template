@@ -62,7 +62,7 @@
       const statusBox = document.getElementById('status');
       const loader = document.getElementById('loader');
 
-      const socket = io('http://localhost:8000/realtime', {
+      const socket = io('http://localhost:8080/realtime', {
         extraHeaders: { authorization: 'Bearer dummy-token' },
       });
 

@@ -1,5 +1,1 @@
-export const eventName = {
-  profile: {
-    update: 'profile.update',
-  },
-};
+export const eventName = {};

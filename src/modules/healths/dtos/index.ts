@@ -1,5 +1,7 @@
 export * from './db-error.dto';
 export * from './db-health-response.dto';
+export * from './db-health-status-response.dto';
+export * from './db-health-status.dto';
 export * from './db-health.dto';
 export * from './mysql-connection-stats.dto';
 export * from './queue-list-response.dto';

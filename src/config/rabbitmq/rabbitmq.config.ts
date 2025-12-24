@@ -5,6 +5,7 @@ import {
 } from '@/common/constants';
 
 export const rabbitmqConfig = () => ({
+  enableRabbitmq: process.env.ENABLE_RABBITMQ === 'true' || false,
   rabbitmqUrl: process.env.RABBITMQ_URI || RABBITMQ_DEFAULT_URI,
   rabbitmqQueue: process.env.RABBITMQ_QUEUE || RABBITMQ_DEFAULT_QUEUE,
   rabbitmqManagementUIPort: parseInt(

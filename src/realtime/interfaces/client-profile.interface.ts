@@ -1,4 +1,4 @@
-export interface ClientProfile {
+export interface AckPayload {
   name: string;
   timestamp: string;
 }

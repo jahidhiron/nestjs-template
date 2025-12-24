@@ -1,6 +1,7 @@
 {
   "error": {
-    "queue-stats-not-found": "Queue stats not found"
+    "queue-stats-not-found": "Queue stats not found",
+    "queues-not-found": "Queues not found"
   },
   "success": {
     "db-health": "Database health status retrieved successful",

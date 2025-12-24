@@ -5,6 +5,10 @@ import { ConfigService } from '@nestjs/config';
 export class RabbitmqConfigService {
   constructor(private configService: ConfigService) {}
 
+  get enableRabbitmq(): boolean {
+    return this.configService.get<boolean>('enableRabbitmq') as boolean;
+  }
+
   get rabbitmqUri(): string {
     return this.configService.get<string>('rabbitmqUrl') as string;
   }
