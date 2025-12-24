@@ -216,16 +216,16 @@ Swagger allows developers to explore and test endpoints directly from the browse
 Once the service is running (locally or in Docker), you can access Swagger UI at:
 
 ```bash
-http://localhost:8000/api
+http://localhost:8080/api
 ```
 
 Example for .env:
 
 ```env
-PORT=8000
+PORT=8080
 ```
 
-For production or staging environments, replace `localhost:8000` with the corresponding API base URL.
+For production or staging environments, replace `localhost:8080` with the corresponding API base URL.
 
 Example:
 
