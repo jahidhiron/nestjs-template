@@ -7,4 +7,5 @@ export enum ModuleName {
   AdSpendDivision = 'ad-spend-divisions',
   AdSpendSource = 'ad-spend-sources',
   Health = 'healths',
+  Project = 'projects',
 }

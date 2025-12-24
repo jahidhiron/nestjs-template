@@ -1,6 +1,6 @@
 {
   "name": "nestjs-template",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A starter NestJS project template with RabbitMQ messaging, TypeORM, WebSocket support, scheduling, Swagger documentation, i18n, and structured testing setup. Includes Docker scripts, migrations, and linting/formatting tools for rapid development and production-ready deployments.",
   "author": "Jahid Hiron",
   "private": true,

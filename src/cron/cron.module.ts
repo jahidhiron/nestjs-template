@@ -1,6 +1,8 @@
 import { ConfigModule } from '@/config';
+import { UpdateProfileService } from '@/cron/services';
+import { ProjectModule } from '@/modules/projects/project.module';
 import { RabbitMqModule } from '@/rabbitmq/rabitmq.module';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 
 /**
  * CronModule
@@ -11,7 +13,7 @@ import { Module } from '@nestjs/common';
  * @category Modules
  */
 @Module({
-  imports: [RabbitMqModule, ConfigModule],
-  providers: [],
+  imports: [forwardRef(() => ProjectModule), RabbitMqModule, ConfigModule],
+  providers: [UpdateProfileService],
 })
 export class CronModule {}

@@ -1,3 +1,3 @@
 export const ServiceNames = {
-  UPSELL_STATS_SYNC: 'UPSELL_STATS_SYNC',
+  NEST_TEMPLATE_SYNC: 'NEST_TEMPLATE_SYNC',
 };

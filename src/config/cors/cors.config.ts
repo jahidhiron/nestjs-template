@@ -17,7 +17,8 @@ export function isOriginAllowed(origin?: string): boolean {
   if (!origin) return true;
 
   const normalizedOrigin = origin.toLowerCase();
+  const origins = [...ALLOWED_ORIGINS, process.env.API_BASE_URL];
 
-  if (ALLOWED_ORIGINS.includes(normalizedOrigin)) return true;
+  if (origins.includes(normalizedOrigin)) return true;
   return ALLOWED_DOMAINS.some((domain) => normalizedOrigin.endsWith(domain));
 }
