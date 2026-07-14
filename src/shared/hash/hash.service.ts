@@ -1,54 +1,70 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { HASH_ENCODING_FORMAT, HASH_KEY_LENGTH, HASH_SALT_BYTE_SIZE } from '@/common/constants';
 import { Injectable } from '@nestjs/common';
-import { scrypt as _scrypt, createHash, randomBytes } from 'crypto';
-import { promisify } from 'util';
-import { IHashOptions } from './interfaces';
+import { randomBytes, timingSafeEqual } from 'crypto';
+import { HASH_ENCODING_FORMAT, HASH_KEY_LENGTH, HASH_SALT_BYTE_SIZE } from './constants';
+import { scryptAsync } from './utils';
 
-const scryptAsync = promisify(_scrypt);
-const DELIM = ':';
-
+/**
+ * Provides cryptographic helpers for password hashing and secure token generation.
+ *
+ * Passwords are hashed with **scrypt** (memory-hard, resistant to GPU/ASIC brute-force).
+ * The resulting string is self-contained: `<hash>:<salt>`, so no separate salt column
+ * is needed in the database.
+ */
 @Injectable()
 export class HashService {
-  private readonly defaultByteSize: number = HASH_SALT_BYTE_SIZE;
-  private readonly defaultFormat: BufferEncoding = HASH_ENCODING_FORMAT;
-  private readonly defaultKeyLength: number = HASH_KEY_LENGTH;
+  private readonly byteSize: number = HASH_SALT_BYTE_SIZE;
+  private readonly format: BufferEncoding = HASH_ENCODING_FORMAT;
+  private readonly keyLength: number = HASH_KEY_LENGTH;
 
-  async hash(password: string, options: IHashOptions = {}): Promise<string> {
-    const byteSize = options.byteSize ?? this.defaultByteSize;
-    const format = options.format ?? this.defaultFormat;
-    const keyLength = options.keyLength ?? this.defaultKeyLength;
-
-    const salt = randomBytes(byteSize).toString(format);
-    const buf = (await scryptAsync(password, salt, keyLength)) as Buffer;
-
-    // store as {derived}:{salt}
-    return `${buf.toString(format)}${DELIM}${salt}`;
+  /**
+   * Hash a plain-text password with a random salt using scrypt.
+   *
+   * @param password - Plain-text value to hash.
+   * @returns A `"<derivedKey>:<salt>"` string ready to persist in the database.
+   */
+  async createHash(password: string): Promise<string> {
+    const salt = randomBytes(this.byteSize).toString(this.format);
+    const buf = await scryptAsync(password, salt, this.keyLength);
+    return `${buf.toString(this.format)}:${salt}`;
   }
 
-  async verify(stored: string, supplied: string, options: IHashOptions = {}): Promise<boolean> {
+  /**
+   * Verify a plain-text password against a stored hash.
+   *
+   * Extracts the salt from the stored value, re-derives the key, and performs
+   * a constant-time comparison to prevent timing attacks.
+   *
+   * @param stored   - The persisted `"<hash>:<salt>"` string from the database.
+   * @param supplied - The plain-text password provided by the user.
+   * @returns `true` if the password matches, `false` otherwise (including on error).
+   */
+  async verify(stored: string, supplied: string): Promise<boolean> {
     try {
-      const format = options.format ?? this.defaultFormat;
-      const keyLength = options.keyLength ?? this.defaultKeyLength;
-
-      // try new delimiter first, fallback to legacy
-      const idx = stored.lastIndexOf(DELIM);
-      if (idx <= 0) {
-        return false;
-      }
+      const idx = stored.lastIndexOf(':');
+      if (idx <= 0) return false;
 
       const hashed = stored.substring(0, idx);
       const salt = stored.substring(idx + 1);
 
-      const buf = (await scryptAsync(supplied, salt, keyLength)) as Buffer;
-
-      return buf.toString(format) === hashed;
-    } catch (err) {
+      const buf = await scryptAsync(supplied, salt, this.keyLength);
+      const derived = buf.toString(this.format);
+      if (derived.length !== hashed.length) return false;
+      return timingSafeEqual(Buffer.from(derived), Buffer.from(hashed));
+    } catch {
       return false;
     }
   }
 
-  apiKeyHashSecret(secret: string): string {
-    return createHash('sha256').update(secret).digest('base64url');
+  /**
+   * Generate a cryptographically secure random token encoded as a hex string.
+   *
+   * Suitable for email-verification links, password-reset tokens, and API keys.
+   *
+   * @param length - Number of random bytes before hex encoding. Defaults to `32`
+   *                 (producing a 64-character hex string).
+   * @returns Hex-encoded random token.
+   */
+  generateToken(length = 32): string {
+    return randomBytes(length).toString('hex');
   }
 }

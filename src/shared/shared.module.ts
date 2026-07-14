@@ -1,22 +1,38 @@
-import { HttpClientService } from '@/shared/http-client';
-import { HttpModule } from '@nestjs/axios';
+import { ConfigModule } from '@/config';
+import { CookieModule } from '@/shared/cookie';
+import { GeoModule } from '@/shared/geo';
+import { GoogleModule } from '@/shared/google';
+import { HttpClientModule } from '@/shared/http-client';
+import { HibpService } from '@/shared/hibp/hibp.service';
 import { Global, Module } from '@nestjs/common';
-import { HashService } from './hash/hash.service';
-import { TokenService } from './hash/token.service';
-import { ErrorResponse, SuccessResponse } from './responses';
-import { ResponseService } from './responses/response.service';
+import { HashModule } from './hash/hash.module';
+import { JwtModule } from './jwt/jwt.module';
+import { MailModule } from './mail/mail.module';
+import { RateLimitModule } from './rate-limit/rate-limit.module';
+import { RedisModule } from './redis/redis.module';
+import { ResponseModule } from './response';
 
+/**
+ * Global shared module that aggregates all cross-cutting infrastructure services.
+ *
+ * Decorated with `@Global()` so its exports are available throughout the application
+ * without requiring explicit imports in every feature module.
+ *
+ * **Provided services:**
+ * - {@link HashService} — scrypt password hashing and secure token generation.
+ * - {@link RedisService} — typed ioredis wrapper for caching, sessions, and queues.
+ * - {@link MailService} — transactional email delivery via the active mail provider.
+ * - {@link HttpClientService} — opinionated Axios wrapper with retry and uniform responses.
+ * - {@link SuccessResponse} / {@link ErrorResponse} — typed HTTP response helpers.
+ * - {@link ResponseStatusInterceptor} — global interceptor that binds status codes automatically.
+ * - {@link CookieService} — centralised writer for authentication cookies.
+ * - {@link RateLimitService} / {@link RateLimitGuard} — Redis fixed-window rate limiting.
+ * - {@link GeoService} — offline IP-to-location lookup.
+ */
 @Global()
 @Module({
-  imports: [HttpModule],
-  providers: [
-    ResponseService,
-    SuccessResponse,
-    ErrorResponse,
-    HashService,
-    TokenService,
-    HttpClientService,
-  ],
-  exports: [SuccessResponse, ErrorResponse, HashService, TokenService, HttpClientService],
+  imports: [ConfigModule, MailModule, ResponseModule, HttpClientModule, HashModule, RedisModule, CookieModule, RateLimitModule, GoogleModule, JwtModule, GeoModule],
+  providers: [HibpService],
+  exports: [ResponseModule, HttpClientModule, HashModule, RedisModule, MailModule, CookieModule, RateLimitModule, GoogleModule, JwtModule, GeoModule, HibpService],
 })
 export class SharedModule {}

@@ -1,0 +1,43 @@
+import { BasePaginatedListProvider } from '@/common/base';
+import { ModuleName } from '@/common/base/enums';
+import type { PaginatedListParams } from '@/common/base/repositories/interfaces';
+import { ServerErrorListQueryDto } from '@/modules/error-tracking/dtos';
+import { ServerError } from '@/modules/error-tracking/entities/server-error.entity';
+import { ServerErrorRepository } from '@/modules/error-tracking/repositories/server-error.repository';
+import { ErrorResponse } from '@/shared/response';
+import { Injectable } from '@nestjs/common';
+
+/**
+ * Returns a paginated list of {@link ServerError} records for administrator review.
+ *
+ * Free-text search runs across `errorName`, `message`, and `path`.
+ * An optional `status` filter narrows results to a specific lifecycle state.
+ */
+@Injectable()
+export class ListServerErrorsProvider extends BasePaginatedListProvider<
+  ServerError,
+  ServerErrorListQueryDto
+> {
+  constructor(repo: ServerErrorRepository, errorResponse: ErrorResponse) {
+    super(ModuleName.ErrorTracking, repo, errorResponse);
+  }
+
+  /**
+   * Builds the repository query parameters for a paginated server-error listing.
+   *
+   * Merges the base pagination params from the DTO with a fixed
+   * `searchBy: ['errorName', 'message', 'path']` and, when a `status` filter
+   * is provided, a `query: { status }` constraint.
+   *
+   * @param dto - Validated query parameters (page, limit, search term, status, etc.).
+   * @returns The fully assembled {@link PaginatedListParams} passed to the
+   *          repository.
+   */
+  protected override buildParams(dto: ServerErrorListQueryDto): PaginatedListParams<ServerError> {
+    return {
+      ...super.buildParams(dto),
+      searchBy: ['errorName', 'message', 'path'],
+      ...(dto.status !== undefined && { query: { status: dto.status } }),
+    };
+  }
+}
