@@ -1,4 +1,4 @@
-import { MySQLConnectionStatsDto } from '@/modules/healths/dtos/mysql-connection-stats.dto';
+import { PostgresConnectionStatsDto } from '@/modules/healths/dtos/postgres-connection-stats.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 
@@ -15,9 +15,9 @@ export class DbHealthStatusDto {
   @Expose()
   db_latency_ms!: number;
 
-  @ApiProperty({ type: MySQLConnectionStatsDto, required: false })
+  @ApiProperty({ type: PostgresConnectionStatsDto, required: false })
   @Expose()
-  mysqlConnections?: MySQLConnectionStatsDto;
+  postgresConnections?: PostgresConnectionStatsDto;
 
   @ApiProperty({
     type: String,
@@ -28,7 +28,7 @@ export class DbHealthStatusDto {
   @Type(() => Date)
   timestamp!: Date;
 
-  @ApiProperty({ required: false, example: 'ECONNREFUSED 127.0.0.1:3306' })
+  @ApiProperty({ required: false, example: 'ECONNREFUSED 127.0.0.1:5432' })
   @Expose()
   error?: string;
 }

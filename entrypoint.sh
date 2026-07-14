@@ -18,14 +18,14 @@ wait_for_service() {
   echo "$host:$port is available - continuing"
 }
 
-# Wait for MySQL to be ready
-echo "Waiting for MySQL to be ready..."
-wait_for_service mysql 3306
+# Note: PostgreSQL is expected to be a cloud-hosted database (Neon, Supabase, RDS, etc.),
+# so it is reachable on startup. No local DB wait is performed here.
+# The app will fail fast with a clear connection error if DATABASE_URL is unreachable.
 
 # Wait for RabbitMQ to be ready
 echo "Waiting for RabbitMQ to be ready..."
 wait_for_service rabbitmq 5672
 
-# Start the NestJS application once both services are ready
+# Start the NestJS application once RabbitMQ is ready
 echo "Starting NestJS application..."
 npm start
